@@ -4,6 +4,10 @@
 
 This project provides a system for answering questions based on the content of uploaded PDF files. It utilizes Flask for the backend, FAISS for vector storage, and LangChain for processing and querying the documents. Users can upload PDF files, which are indexed for efficient retrieval, and then ask questions to receive answers derived from the uploaded content. The system uses the Ollama models (OllamaEmbeddings and ChatOllama) for embedding generation and answer generation, ensuring high-quality and relevant responses.
 
+![image](https://github.com/user-attachments/assets/4e77112e-3bed-4dae-9782-a88589e6ef86)
+
+![image](https://github.com/user-attachments/assets/0a9e06ec-e16e-46e4-8dc5-9b31e498e6bb)
+
 ---
 
 ## Project Structure
