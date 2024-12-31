@@ -61,8 +61,16 @@ $ source myenv1/bin/activate  # On Windows, use myenv1\Scripts\activate
 ```bash
 $ pip install -r requirements.txt
 ```
+### **4. Download and Set Up Ollama**
 
-### **4. Add Environment Variables** (For langsmith tracing purpose only)
+- Download and install the Ollama CLI tool from the [Ollama website](https://ollama.ai/).
+- Pull the required models for this project by running:
+  ```bash
+  $ ollama pull nomic-embed-text
+  $ ollama pull phi3:mini
+  ```
+
+### **5. Add Environment Variables** (For langsmith tracing purpose only)
 
 - Create a `.env` file in the root directory with the following variables:
 
@@ -70,7 +78,7 @@ $ pip install -r requirements.txt
 LANGCHAIN_API_KEY = your_api_key
 ```
 
-### **5. Run the Application**
+### **6. Run the Application**
 
 ```bash
 $ python app.py
