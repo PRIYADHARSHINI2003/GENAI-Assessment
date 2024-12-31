@@ -39,6 +39,14 @@ This project provides a system for answering questions based on the content of u
 - Provides bullet-point answers based on the retrieved context.
 
 ---
+### **Flask Application**
+![image](https://github.com/user-attachments/assets/fe146837-3537-4d0a-b79e-7bce5f243f9d)
+
+- Flask application rendered in localhost
+- Use your own PDF or use sample pdf from the data folder in the project directory
+
+
+---
 
 ## Setup Instructions
 
