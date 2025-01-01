@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG-based PDF QA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        label {
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        input[type="file"], input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RAG-based PDF QA</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="files">Upload PDFs:</label>
+                <input type="file" name="files" id="files" multiple required />
+            </div>
+            <button type="submit">Upload PDFs</button>
+        </form>
+        
+        <h2>Ask a Question</h2>
+        <form id="question-form" onsubmit="askQuestion(event)">
+            <div class="form-group">
+                <input type="text" id="question" placeholder="Type your question here..." required />
+            </div>
+            <button type="submit">Ask</button>
+        </form>
+        
+        <div class="response" id="response" style="display: none;">
+            <h3>Retrieved Context:</h3>
+            <ul id="retrieved-context"></ul>
+            <h3>Generated Response:</h3>
+            <p id="generated-response"></p>
+        </div>
+    </div>
+
+    <script>
+        async function askQuestion(event) {
+            event.preventDefault();
+            const question = document.getElementById('question').value;
+            const responseDiv = document.getElementById('response');
+            const contextList = document.getElementById('retrieved-context');
+            const answerDiv = document.getElementById('generated-response');
+            
+            // Clear previous results
+            responseDiv.style.display = 'none';
+            contextList.innerHTML = '';  // Clear previous context
+            answerDiv.textContent = ''; // Clear previous response
+
+            try {
+                // Send the question to the backend
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question }),
+                });
+
+                const data = await response.json();
+
+                // Show the response container
+                responseDiv.style.display = 'block';
+
+                //responseDiv.textContent = data.context|| 'No response generated' ;
+
+                // Populate the retrieved context
+                if (data.retrieved_context && data.retrieved_context.length > 0) {
+                    data.retrieved_context.forEach(context => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = context;
+                        contextList.appendChild(listItem);
+                    });
+                } else {
+                    const noContextItem = document.createElement('li');
+                    noContextItem.textContent = 'No relevant context retrieved.';
+                    contextList.appendChild(noContextItem);
+                }
+
+                // Populate the generated response
+                answerDiv.textContent = data.response || 'No response generated.';
+            } catch (error) {
+                // Handle errors
+                responseDiv.style.display = 'block';
+                contextList.innerHTML = `<li>Error: ${error.message}</li>`;
+            }
+        }
+    </script>
+</body>
+</html>
+
+
